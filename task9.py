@@ -1,6 +1,6 @@
 # Display the options that the user can select
 print("""Please select one option below:
-            -- Enter '1': prompt two numbers and an operator to find the result
+            -- Enter '1': provide two numbers and an operator to find the result
             -- Enter '2': read all of the equation(s) from a txt file and print out all the result(s)
         """)
 
