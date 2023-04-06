@@ -1,12 +1,12 @@
 # Display the options that the user can select
 print("""Please select one option below:
-            -- Enter '1': provide two numbers and an operator to find the result
-            -- Enter '2': read all of the equation(s) from a txt file and print out all the result(s)
+            -- Enter '1': provide two numbers and an operator to find the result.
+            -- Enter '2': read all of the equation(s) from a txt file and print out all equation(s) with the result(s).
         """)
 
 while True:
     try:
-        # Prompt user to make a choice betweeen 1 and 2
+        # Prompt user to make a choice between 1 and 2
         Option = input('Your choice: ')
         if Option not in ['1', '2']:
             raise ValueError("Invalid option. Please enter 1 or 2.")
@@ -18,7 +18,9 @@ while True:
         continue
 
 # Option 1: user enter 2 numbers and an operator
-if Option == '1':    
+if Option == '1':
+    # Initialize a list that will store result(s)
+    results = []
     while True:
         while True:
             try:
@@ -28,7 +30,7 @@ if Option == '1':
                 break
 
             # Raise exception if value entered is not valid
-            except ValueError: 
+            except ValueError:
                 print('Invalid input. Please try again.')
                 continue
 
@@ -46,44 +48,54 @@ if Option == '1':
                 continue
 
         # Perform the relevant operations with error handling (if any)
+        # CORRECTED: We remove break statement so that we don't exit the loop
         if operation == '+':
             result = number_one + number_two
-            break
         elif operation == '-':
             result = number_one - number_two
-            break
         elif operation == '*':
             result = number_one * number_two
-            break
         elif operation == '/':
-            try: 
+            try:
                 result = number_one / number_two
-                break
             except ZeroDivisionError:
                 print("Division by zero is not possible. Please try again.")
                 continue
         elif operation == '%':
-            try: 
+            try:
                 result = number_one % number_two
-                break
             except ZeroDivisionError:
                 print("Modulo not available with 0. Please try again.")
                 continue
-        elif operation ==  '**':
+        elif operation == '**':
             result = number_one ** number_two
-            break
         else:
             result = number_one // number_two
+
+        # CORRECTED: Display the result using f-string
+        print(f"{number_one} {operation} {number_two} = {result}")
+        # CORRECTED: Append the result to our list
+        results.append(f"{number_one} {operation} {number_two} = {result}")
+
+        # CORRECTED: Ask user if they want to solve another equation
+        while True:
+            user_input = input("Do you want to solve another equation? (y/n): ")
+            if user_input.lower() in ['y', 'n']:
+                break
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
+
+        if user_input.lower() == 'n':
             break
 
-    # Prompt user for the filename to store the result
-    filename = input('Enter filename to store result:  ')
+    # Prompt user for the filename to store the results
+    filename = input('Enter filename to store results: ')
 
     try:
-        # Write the result to the file
+        # Write the results to the file
         with open(filename, 'w') as file:
-            file.write(str(result))
-        print(f"Your result has been saved to {filename}.")
+            file.write('\n'.join(results))
+        print(f"Your result(s) has/have been saved to {filename}.")
 
     except Exception as err:
         # Catch any errors that occur when opening or writing to the file
@@ -99,11 +111,11 @@ else:
             # open and read all content
             with open(filename, 'r') as file:
                 equations = file.readlines()
-            
-            # for each equation, eval and perform the equation    
+
+            # for each equation, eval and perform the equation
             for equation in equations:
                 result = eval(equation.strip())
-                
+
                 # Print the equation and its result to the terminal
                 print(f"{equation.strip()} = {result}")
             break
